@@ -1,0 +1,146 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: Build Linux Binary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev
+          pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Build standalone Linux executable
+        run: |
+          pyinstaller --onefile \
+            --name lintv \
+            --add-data "assets:assets" \
+            --add-data "data:data" \
+            lintv/cli.py
+
+      - name: Package Linux release archive
+        run: |
+          mkdir -p release-linux
+          cp dist/lintv release-linux/
+          cp -r assets data install.sh README.md LICENSE release-linux/
+          tar -czvf lintv-linux-x86_64.tar.gz -C release-linux .
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lintv-linux-x86_64
+          path: lintv-linux-x86_64.tar.gz
+
+  build-windows:
+    name: Build Windows Executable
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyInstaller
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Build standalone Windows executable
+        run: |
+          pyinstaller --onefile --noconsole `
+            --name lintv `
+            --add-data "assets;assets" `
+            lintv/cli.py
+
+      - name: Package Windows release zip
+        run: |
+          mkdir release-windows
+          cp dist/lintv.exe release-windows/
+          cp README.md, LICENSE release-windows/
+          Compress-Archive -Path release-windows/* -DestinationPath lintv-windows-x86_64.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lintv-windows-x86_64
+          path: lintv-windows-x86_64.zip
+
+  build-macos:
+    name: Build macOS Binary
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyInstaller
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Build standalone macOS executable
+        run: |
+          pyinstaller --onefile \
+            --name lintv \
+            --add-data "assets:assets" \
+            lintv/cli.py
+
+      - name: Package macOS release zip
+        run: |
+          mkdir release-macos
+          cp dist/lintv release-macos/
+          cp README.md LICENSE release-macos/
+          zip -r lintv-macos-x86_64.zip release-macos/
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lintv-macos-x86_64
+          path: lintv-macos-x86_64.zip
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [build-linux, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Display downloaded files
+        run: ls -R
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            lintv-linux-x86_64/lintv-linux-x86_64.tar.gz
+            lintv-windows-x86_64/lintv-windows-x86_64.zip
+            lintv-macos-x86_64/lintv-macos-x86_64.zip
+          generate_release_notes: true

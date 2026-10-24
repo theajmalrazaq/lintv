@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lintv"
+version = "1.0.0"
+description = "Android TV Remote Control & Screen Streaming Center via Tailscale & ADB"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+  {name = "Ajmal Razaq", email = "theajmalrazaq@gmail.com"}
+]
+keywords = ["android", "tv", "tailscale", "scrcpy", "adb", "remote-control", "streaming"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Multimedia :: Video",
+]
+
+[project.urls]
+Homepage = "https://github.com/theajmalrazaq/lintv"
+Issues = "https://github.com/theajmalrazaq/lintv/issues"
+
+[project.scripts]
+lintv = "lintv.cli:main"

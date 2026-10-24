@@ -1,0 +1,3 @@
+# Optional dependencies for native Linux Libadwaita UI
+# (Tkinter and CLI mode use standard Python library with zero dependencies)
+PyGObject>=3.42.0; sys_platform == 'linux'

@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+"""
+LinTV Entrypoint Script
+"""
+
+import os
+import sys
+
+# Ensure lintv package is on python path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+from lintv.cli import main
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3584e4"/>
+      <stop offset="100%" stop-color="#1c71d8"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#24273a"/>
+      <stop offset="100%" stop-color="#181825"/>
+    </linearGradient>
+  </defs>
+
+  <!-- TV Outer Frame -->
+  <rect x="12" y="16" width="104" height="76" rx="14" fill="url(#bgGrad)"/>
+  
+  <!-- TV Screen -->
+  <rect x="18" y="22" width="92" height="64" rx="8" fill="url(#screenGrad)"/>
+
+  <!-- Antenna / Stand Base -->
+  <path d="M48 102 L80 102 L74 92 L54 92 Z" fill="#3584e4"/>
+  <rect x="42" y="102" width="44" height="6" rx="3" fill="#1c71d8"/>
+
+  <!-- Play Triangle on Screen -->
+  <polygon points="56,42 78,54 56,66" fill="#3584e4"/>
+
+  <!-- Remote Wave Signals (Tailscale Mesh / Remote) -->
+  <path d="M78 36 A 16 16 0 0 1 88 46" fill="none" stroke="#62a0ea" stroke-width="4" stroke-linecap="round"/>
+  <path d="M84 28 A 26 26 0 0 1 100 44" fill="none" stroke="#99c1f1" stroke-width="4" stroke-linecap="round"/>
+</svg>

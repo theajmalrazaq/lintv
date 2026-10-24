@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=LinTV
+GenericName=Android TV Remote & Streamer
+Comment=Control and watch Android TV over Tailscale VPN and ADB
+Exec=lintv
+Icon=io.github.theajmalrazaq.lintv
+Terminal=false
+Type=Application
+Categories=Utility;AudioVideo;RemoteAccess;Network;
+Keywords=TV;Android;Tailscale;Remote;scrcpy;ADB;
+StartupNotify=true
+StartupWMClass=io.github.theajmalrazaq.lintv
+Actions=Stream;Status;
+
+[Desktop Action Stream]
+Name=Watch TV Screen
+Exec=lintv --start
+
+[Desktop Action Status]
+Name=Check TV Status
+Exec=lintv --status
